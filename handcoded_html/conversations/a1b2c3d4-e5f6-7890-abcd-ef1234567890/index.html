@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Chat485</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="sidebar">
+        <p><a href="/">Chat485</a></p>
+        <p><a href="#">New chat</a></p>
+        <ul>
+            <li><a href="/conversations/a1b2c3d4-e5f6-7890-abcd-ef1234567890/" aria-current="page">Hello World</a></li>
+            <li><a href="/conversations/c3d4e5f6-a7b8-9012-cdef-123456789012/">Visiting Ann Arbor</a></li>
+        </ul>
+        <p>Andrew DeOrio</p>
+    </div>
+    <div class="main">
+        <div class="messages">
+            <p>user: Hello</p>
+            <p>assistant: Hello</p>
+            <p>user: world</p>
+            <p>assistant: world</p>
+            <p>user: Hello world!</p>
+            <p>assistant: Hello world!</p>
+        </div>
+        <div class="input-area">
+            <select>
+                <option value="echo-1" selected>echo-1</option>
+                <option value="llama3.2:3b">llama3.2:3b</option>
+                <option value="claude-sonnet-4-6">claude-sonnet-4-6</option>
+                <option value="gpt-5">gpt-5</option>
+                <option value="gemini-3.0-flash">gemini-3.0-flash</option>
+            </select>
+            <button type="button">Send</button>
+        </div>
+    </div>
+</body>
+</html>
