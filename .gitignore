@@ -1,0 +1,22 @@
+# Python virtual environment
+env/
+
+# Python generated files
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# macOS generated files
+.DS_Store
+
+# Generated website directories
+generated_html/
+chat485_html/
+
+# Submission archives
+submit.tar.gz
+submit.tar.xz
+
+# Local copies of the project specification
+485project1.md
+EECS 485 P1.pdf

@@ -1,0 +1,41 @@
+[lint]
+# Specify which groups of lint rules to use.
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "D",   # pydocstyle
+    "I",   # isort
+    "UP",  # pyupgrade
+    "N",   # pep8-naming
+    "PT",  # flake8-pytest-style
+    "B",   # flake8-bugbear
+    "SIM", # flake8-simplify
+    "PL",  # pylint subset
+    "RET", # flake8-return
+    "C4",  # flake8-comprehensions
+    "ARG", # flake8-unused-arguments
+]
+# Ignore specific rule violations.  See https://docs.astral.sh/ruff/rules.
+ignore = [
+    # Disable the following two rules because they conflict with other rules.
+    "D203",  # one-blank-line-before-class (conflicts with D211)
+    "D213",  # multi-line-summary-second-line (conflicts with D212)
+
+    # Disable the following rules because they're made redundant by the formatter.
+    "W191",  # tab-indentation
+    "E111",  # indentation-with-invalid-multiple
+    "E114",  # indentation-with-invalid-multiple-comment
+    "E117",  # over-indented
+    "D206",  # indent-with-spaces
+    "D300",  # triple-single-quotes
+]
+
+[lint.pydocstyle]
+convention = "pep257"
+
+[lint.isort]
+# `utils` is the shared test-helper module (tests/utils.py).  Pin it as
+# first-party so import sorting is identical whether ruff is invoked from the
+# project root (student layout) or from autograder/ (grader layout).
+known-first-party = ["utils"]
