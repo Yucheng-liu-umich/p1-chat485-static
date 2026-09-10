@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat485</title>
+</head>
+<body>
+    <header>
+        <h1>Chat485</h1>
+        <p>Logged in as: {{ user.fullname }}</p>
+    </header>
+
+    <main>
+        <section>
+            <h2>Available Models</h2>
+            <ul>
+                {% for model in models %}
+                <li>{{ model }}</li>
+                {% endfor %}
+            </ul>
+        </section>
+
+        <section>
+            <h2>Conversations</h2>
+            <ul>
+                {% for conv in conversations %}
+                <li>
+                    <a href="/conversations/{{ conv.uuid }}/">{{ conv.title }}</a>
+                </li>
+                {% endfor %}
+            </ul>
+        </section>
+    </main>
+</body>
+</html>

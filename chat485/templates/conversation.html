@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ conversation.title }} - Chat485</title>
+</head>
+<body>
+    <header>
+        <h1><a href="/">Chat485</a></h1>
+        <p>Logged in as: {{ user.fullname }}</p>
+    </header>
+
+    <main>
+        <aside>
+            <h2>Conversations</h2>
+            <ul>
+                {% for conv in conversations %}
+                <li>
+                    {% if conv.uuid == current_uuid %}
+                    <strong>{{ conv.title }}</strong>
+                    {% else %}
+                    <a href="/conversations/{{ conv.uuid }}/">{{ conv.title }}</a>
+                    {% endif %}
+                </li>
+                {% endfor %}
+            </ul>
+        </aside>
+
+        <section>
+            <h2>{{ conversation.title }}</h2>
+
+            {% if show_older %}
+            <div>
+                <a href="#">Show older messages</a>
+            </div>
+            {% endif %}
+
+            <div class="messages">
+                {% for msg in messages %}
+                <div class="message {{ msg.role }}">
+                    <p><strong>{{ msg.role }}:</strong> {{ msg.content }}</p>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+    </main>
+</body>
+</html>
