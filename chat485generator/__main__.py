@@ -59,10 +59,13 @@ def main(input_dir, output_dir, verbose):
         sys.exit(1)
 
     config_file = input_path / "config.json"
-    template_dir = input_path / "templates"
-
     if not config_file.exists():
         print(f"chat485generator error: '{config_file}' not found")
+        sys.exit(1)
+
+    templates_dir = input_path / "templates"
+    if not templates_dir.exists() or not templates_dir.is_dir():
+        print(f"chat485generator error: '{templates_dir}' not found")
         sys.exit(1)
 
     try:
@@ -72,11 +75,9 @@ def main(input_dir, output_dir, verbose):
         print(f"chat485generator error: '{config_file}'\n{err}")
         sys.exit(1)
 
-    template_path = template_dir if template_dir.is_dir() else input_path
-
     try:
         template_env = jinja2.Environment(
-            loader=jinja2.FileSystemLoader(template_path),
+            loader=jinja2.FileSystemLoader(templates_dir),
             autoescape=jinja2.select_autoescape(["html", "xml"]),
         )
     except jinja2.TemplateError as err:

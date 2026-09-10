@@ -1,0 +1,11 @@
+#!/bin/bash
+set -Eeuo pipefail
+set -x
+
+ruff check chat485generator
+ruff format --check chat485generator
+pytest -v
+rm -rf chat485_html
+chat485generator chat485 -o chat485_html
+html5validator --ignore JAVA_TOOL_OPTIONS --root handcoded_html
+html5validator --ignore JAVA_TOOL_OPTIONS --root chat485_html
