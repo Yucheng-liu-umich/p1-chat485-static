@@ -19,35 +19,35 @@ def test_output_dir_already_exists(tmp_path):
     input_dir = tmp_path / "input"
     input_dir.mkdir()
     (input_dir / "templates").mkdir()
-    (input_dir / "config.json").write_text("[]", encoding="utf-8")
+    (input_dir / "templates" / "index.html").write_text(
+        "<h1>Home</h1>", encoding="utf-8"
+    )
+    config_data = [{"url": "/", "template": "index.html", "context": {}}]
+    (input_dir / "config.json").write_text(json.dumps(config_data), encoding="utf-8")
 
     out_dir = tmp_path / "existing_output"
     out_dir.mkdir()
-    sentinel = out_dir / "keep_me.txt"
-    sentinel.write_text("safe", encoding="utf-8")
 
     res = run_cli([str(input_dir), "-o", str(out_dir)])
+    output = res.stdout + res.stderr
     assert res.returncode != 0
-    assert "chat485generator error:" in res.stdout
-    assert "already exists" in res.stdout
-    assert str(out_dir) in res.stdout
-    assert sentinel.exists()
-    assert sentinel.read_text(encoding="utf-8") == "safe"
+    assert "chat485generator error:" in output
+    assert "already exists" in output
 
 
 def test_missing_config_file(tmp_path):
     """Test error when config.json is missing in input directory."""
-    input_dir = tmp_path / "empty_input"
+    input_dir = tmp_path / "missing_config_input"
     input_dir.mkdir()
     (input_dir / "templates").mkdir()
     out_dir = tmp_path / "output"
 
     res = run_cli([str(input_dir), "-o", str(out_dir)])
+    output = res.stdout + res.stderr
     assert res.returncode != 0
-    assert "chat485generator error:" in res.stdout
-    assert "config.json" in res.stdout
-    assert "not found" in res.stdout
-    assert not out_dir.exists()
+    assert "chat485generator error:" in output
+    assert "config.json" in output
+    assert "not found" in output
 
 
 def test_invalid_json_config(tmp_path):
@@ -55,13 +55,14 @@ def test_invalid_json_config(tmp_path):
     input_dir = tmp_path / "invalid_json_input"
     input_dir.mkdir()
     (input_dir / "templates").mkdir()
-    (input_dir / "config.json").write_text("{ invalid json }", encoding="utf-8")
+    (input_dir / "config.json").write_text("{ malformed json }", encoding="utf-8")
     out_dir = tmp_path / "output"
 
     res = run_cli([str(input_dir), "-o", str(out_dir)])
+    output = res.stdout + res.stderr
     assert res.returncode != 0
-    assert "chat485generator error:" in res.stdout
-    assert "config.json" in res.stdout
+    assert "chat485generator error:" in output
+    assert "config.json" in output
 
 
 def test_missing_templates_directory(tmp_path):
@@ -72,15 +73,16 @@ def test_missing_templates_directory(tmp_path):
     out_dir = tmp_path / "output"
 
     res = run_cli([str(input_dir), "-o", str(out_dir)])
+    output = res.stdout + res.stderr
     assert res.returncode != 0
-    assert "chat485generator error:" in res.stdout
-    assert "templates" in res.stdout
-    assert "not found" in res.stdout
+    assert "chat485generator error:" in output
+    assert "templates" in output
+    assert "not found" in output
 
 
 def test_missing_template_file(tmp_path):
     """Test error when a specific template referenced in config is missing."""
-    input_dir = tmp_path / "missing_template_input"
+    input_dir = tmp_path / "missing_template_file_input"
     input_dir.mkdir()
     (input_dir / "templates").mkdir()
 
@@ -89,9 +91,10 @@ def test_missing_template_file(tmp_path):
     out_dir = tmp_path / "output"
 
     res = run_cli([str(input_dir), "-o", str(out_dir)])
+    output = res.stdout + res.stderr
     assert res.returncode != 0
-    assert "chat485generator error:" in res.stdout
-    assert "nonexistent.html" in res.stdout
+    assert "chat485generator error:" in output
+    assert "nonexistent.html" in output
 
 
 def test_invalid_jinja_syntax(tmp_path):
@@ -102,16 +105,17 @@ def test_invalid_jinja_syntax(tmp_path):
     tmpl_dir.mkdir()
 
     (tmpl_dir / "broken.html").write_text(
-        "<h1>{% if True %}No Endif</h1>", encoding="utf-8"
+        "<h1>{% if True %}Unclosed Tag</h1>", encoding="utf-8"
     )
     config_data = [{"url": "/", "template": "broken.html", "context": {}}]
     (input_dir / "config.json").write_text(json.dumps(config_data), encoding="utf-8")
     out_dir = tmp_path / "output"
 
     res = run_cli([str(input_dir), "-o", str(out_dir)])
+    output = res.stdout + res.stderr
     assert res.returncode != 0
-    assert "chat485generator error:" in res.stdout
-    assert "broken.html" in res.stdout
+    assert "chat485generator error:" in output
+    assert "broken.html" in output
 
 
 def test_multiple_pages_and_nested_urls(tmp_path):

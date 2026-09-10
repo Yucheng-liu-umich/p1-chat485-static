@@ -2,47 +2,46 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{{ conversation.title }} - Chat485</title>
+    <title>Chat485</title>
 </head>
 <body>
-    <header>
-        <h1><a href="/">Chat485</a></h1>
-        <p>Logged in as: {{ user.fullname }}</p>
-    </header>
+    <aside>
+        <a href="/">Chat485</a>
+        <a href="/">New chat</a>
+        <ul>
+            {% for conv in conversations %}
+            <li>
+                <a href="/conversations/{{ conv.uuid }}/" {% if conv.uuid == current_uuid %}aria-current="page"{% endif %}>
+                    {{ conv.title }}
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+        <p>{{ user }}</p>
+    </aside>
 
     <main>
-        <aside>
-            <h2>Conversations</h2>
-            <ul>
-                {% for conv in conversations %}
-                <li>
-                    {% if conv.uuid == current_uuid %}
-                    <strong>{{ conv.title }}</strong>
-                    {% else %}
-                    <a href="/conversations/{{ conv.uuid }}/">{{ conv.title }}</a>
-                    {% endif %}
-                </li>
-                {% endfor %}
-            </ul>
-        </aside>
+        {% if show_older %}
+        <p>Load older messages</p>
+        {% endif %}
 
         <section>
-            <h2>{{ conversation.title }}</h2>
-
-            {% if show_older %}
+            {% for msg in messages %}
             <div>
-                <a href="#">Show older messages</a>
+                <span>{{ msg.role }}</span>
+                <p>{{ msg.content }}</p>
             </div>
-            {% endif %}
-
-            <div class="messages">
-                {% for msg in messages %}
-                <div class="message {{ msg.role }}">
-                    <p><strong>{{ msg.role }}:</strong> {{ msg.content }}</p>
-                </div>
-                {% endfor %}
-            </div>
+            {% endfor %}
         </section>
+
+        <form>
+            <select name="model">
+                {% for m in models %}
+                <option value="{{ m }}" {% if m == "echo-1" %}selected{% endif %}>{{ m }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit">Send</button>
+        </form>
     </main>
 </body>
 </html>
